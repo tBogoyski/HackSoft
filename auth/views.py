@@ -13,12 +13,19 @@ class CustomLoginView(APIView):
         email = request.data.get('username')
         password = request.data.get('password')
         user = authenticate(request, email=email, password=password)
+
         if user is None:
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            login(request, user)
-            token, _ = Token.objects.get_or_create(user=user)
-            return Response({'email': user.email, 'token': token.key}, status=status.HTTP_200_OK)
+
+        if not user.is_valid:
+            return Response(
+                {'error': 'Not a valid user. Please contact admin.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        login(request, user)
+        token, _ = Token.objects.get_or_create(user=user)
+        return Response({'email': user.email, 'token': token.key}, status=status.HTTP_200_OK)
 
 
 class CustomLogoutView(APIView):
