@@ -1,13 +1,8 @@
 from django.urls import path
 
-from users.views import UserRegisterView, UserDetailView, CustomLoginView, CustomLogoutView
+from users.views import RegisterUserView, UserProfileView
 
 urlpatterns = [
-    # Authentication
-    path('register/', UserRegisterView.as_view(), name='register'),
-    path('login/', CustomLoginView.as_view(), name='login'),
-    path('logout/', CustomLogoutView.as_view(), name='logout'),
-
-    # User management
-    path('user/<int:pk>/', UserDetailView.as_view(), name='user-detail'),
+    path('register/', RegisterUserView.as_view(), name='register'),
+    path('profile/', UserProfileView.as_view(), name='user_profile'),
 ]
