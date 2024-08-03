@@ -18,7 +18,7 @@ class PostCreateView(CreateAPIView):
 
 
 class PostListView(ListAPIView):
-    queryset = Post.objects.all()
+    queryset = Post.objects.filter(deleted_at__isnull=True)
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated]
 
@@ -64,3 +64,20 @@ class PostUnlikeView(APIView):
 
         post.liked_by.remove(request.user)
         return Response({'detail': 'Post is unliked successfully.'}, status=status.HTTP_200_OK)
+
+
+class PostDeleteView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, post_id):
+        try:
+            post = Post.objects.get(id=post_id, deleted_at__isnull=True)
+        except Post.DoesNotExist:
+            return Response({'detail': 'Post not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        if post.author != request.user:
+            return Response({'detail': 'You do not have permission to delete this post.'},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        post.soft_delete()
+        return Response({'detail': 'The post has been deleted.'}, status=status.HTTP_204_NO_CONTENT)
