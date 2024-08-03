@@ -10,21 +10,17 @@ class CustomUserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         ('Personal info', {'fields': ('name', 'profile_picture', 'short_description')}),
-        (
-            'Permissions',
-            {'fields': ('is_valid', 'is_staff', 'is_superuser', 'user_permissions')}
-        ),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2'),
+            'fields': ('email', 'password1', 'password2', 'name', 'short_description'),
         }),
     )
-    list_display = ('email', 'name', 'is_valid', 'is_superuser')
+    list_display = ('id', 'email', 'name', 'is_valid', 'is_superuser', 'created_at')
     list_filter = ('is_valid', 'is_superuser')
     search_fields = ('email', 'name')
-    ordering = ('email',)
+    ordering = ('-created_at', 'email')
 
     # Adding a custom action to mark users as valid
     def make_valid(self, request, queryset):

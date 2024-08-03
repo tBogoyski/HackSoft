@@ -1,3 +1,5 @@
+import typing
+
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import status
 from rest_framework.authtoken.models import Token
@@ -5,11 +7,14 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+if typing.TYPE_CHECKING:
+    from rest_framework.request import Request
+
 
 class CustomLoginView(APIView):
     permission_classes = [AllowAny]
 
-    def post(self, request):
+    def post(self, request: 'Request') -> 'Response':
         email = request.data.get('username')
         password = request.data.get('password')
         user = authenticate(request, email=email, password=password)
@@ -31,7 +36,7 @@ class CustomLoginView(APIView):
 class CustomLogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request):
+    def post(self, request: 'Request') -> 'Response':
         try:
             # Get the token and delete it
             token = Token.objects.get(user=request.user)

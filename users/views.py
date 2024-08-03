@@ -12,9 +12,9 @@ class RegisterUserView(CreateAPIView):
 
 
 class UserProfileView(RetrieveUpdateAPIView):
-    queryset = CustomUser.objects.all()
+    queryset = CustomUser.objects.filter(is_valid=True)
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_object(self):
+    def get_object(self) -> 'CustomUser':
         return self.request.user

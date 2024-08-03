@@ -13,7 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {'email': {'read_only': True}}
 
     @staticmethod
-    def get_total_likes_on_posts(obj):
+    def get_total_likes_on_posts(obj: 'CustomUser') -> int:
         user_posts = obj.get_posts
 
         if not user_posts.exists():
@@ -25,7 +25,7 @@ class UserSerializer(serializers.ModelSerializer):
         return total_likes
 
     @staticmethod
-    def get_total_posts(obj):
+    def get_total_posts(obj: 'CustomUser') -> int:
         return obj.get_posts.count()
 
 
@@ -35,7 +35,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         fields = ('email', 'password', 'name', 'profile_picture', 'short_description')
         extra_kwargs = {'password': {'write_only': True}}
 
-    def create(self, validated_data):
+    def create(self, validated_data: dict) -> 'CustomUser':
         user = CustomUser.objects.create_user(
             email=validated_data['email'],
             password=validated_data['password'],
