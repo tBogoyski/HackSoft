@@ -9,6 +9,7 @@ class Post(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
     liked_by = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_posts', blank=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f'{self.author} - {self.content[:50]}'  # First 50 characters of the content
@@ -16,3 +17,11 @@ class Post(models.Model):
     @property
     def get_likes_count(self):
         return self.liked_by.count()
+
+    def soft_delete(self):
+        self.deleted_at = timezone.now()
+        self.save()
+
+    def restore(self):
+        self.deleted_at = None
+        self.save()
