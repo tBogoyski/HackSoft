@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from posts.models import Post
+from posts.paginators import PostCursorPagination
 from posts.serializers import PostCreateSerializer, PostSerializer
 
 
@@ -20,6 +21,7 @@ class PostCreateView(CreateAPIView):
 class PostListView(ListAPIView):
     queryset = Post.objects.filter(deleted_at__isnull=True)
     serializer_class = PostSerializer
+    pagination_class = PostCursorPagination
     permission_classes = [IsAuthenticated]
 
 

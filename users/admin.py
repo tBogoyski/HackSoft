@@ -12,7 +12,8 @@ class CustomUserAdmin(UserAdmin):
         ('Personal info', {'fields': ('name', 'profile_picture', 'short_description')}),
         (
             'Permissions',
-            {'fields': ('is_valid', 'is_active', 'is_staff', 'is_superuser', 'user_permissions')}),
+            {'fields': ('is_valid', 'is_staff', 'is_superuser', 'user_permissions')}
+        ),
     )
     add_fieldsets = (
         (None, {
@@ -20,7 +21,8 @@ class CustomUserAdmin(UserAdmin):
             'fields': ('email', 'password1', 'password2'),
         }),
     )
-    list_display = ('email', 'name', 'is_valid', 'is_staff', 'is_active')
+    list_display = ('email', 'name', 'is_valid', 'is_superuser')
+    list_filter = ('is_valid', 'is_superuser')
     search_fields = ('email', 'name')
     ordering = ('email',)
 
