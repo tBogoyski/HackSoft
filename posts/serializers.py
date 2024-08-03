@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
 from posts.models import Post
-from users.models import CustomUser
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -13,7 +12,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ('id', 'author', 'content', 'created_at', 'updated_at', 'liked_by', 'get_likes_count')
+        fields = ('id', 'author', 'content', 'created_at', 'liked_by', 'get_likes_count')
 
 
 class PostCreateSerializer(serializers.ModelSerializer):
