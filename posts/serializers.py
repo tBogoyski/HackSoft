@@ -1,9 +1,17 @@
 from rest_framework import serializers
 
 from posts.models import Post
+from users.models import CustomUser
+
+
+class AuthorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ('name', 'short_description', 'profile_picture')
 
 
 class PostSerializer(serializers.ModelSerializer):
+    author = AuthorSerializer(read_only=True)
     liked_by = serializers.SlugRelatedField(
         slug_field='email',
         many=True,
